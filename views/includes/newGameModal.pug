@@ -1,0 +1,55 @@
+//
+    Copyright 2017-2018 James V. Craster
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+    
+div(id="newGameModal" class="ui modal column segment transition")
+    div(class="header") New Game
+    p(id="addNewGameAdditionalError" style="color:red")
+    form(action="" id="newGameForm" class="ui form" style="text-align:center")
+        div(class="field")
+            div(class="ui input")
+                input(id="newGameFormName" name="gameName" type="text" placeholder="Game name" maxlength="20" autocomplete="off")
+        br
+        div(class="field" style="text-align:left; margin-left:auto; margin-right:auto;")
+            div(class="ui toggle checkbox")
+                input(id="newGameFormRanked" name="gameType" type="checkbox")
+                label Ranked (signed-in players only)
+            br
+            br
+            div(class="ui toggle checkbox")
+                input(id="newGameFormPrivate" name="gameType" type="checkbox")
+                label Private (players need a password)
+            div(class="ui left icon input disabled" style="width:15em; margin-left:30px;")
+                i(class="lock icon")
+                input(id="newGameFormPassword" name="gamePassword" type="text" placeholder="Enter password" maxlength="20" autocomplete="off")
+        br
+        div(class="field")
+            div(class="ui form")
+                div(class="inline fields" style="text-align:right;")
+                    label Game mode:
+                    - for(let i = 0; i < gameCheckboxesArray.length; i++){
+                    div(class="field")
+                        div(class="ui radio checkbox")
+                            -if(i == 0){
+                                input(type="radio" name="type" checked = "checked" value= gameCheckboxesArray[i])
+                            -}else{
+                                input(type="radio" name="type" value= gameCheckboxesArray[i])
+                            -}
+                            label= gameCheckboxesArray[i]
+
+                    -}
+        
+        div(class="ui error message")
+        br
+        br
+        button(id="newGameModalCreateButton" class="ui blue button") Create Game 
+    
+        

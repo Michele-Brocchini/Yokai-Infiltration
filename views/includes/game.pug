@@ -1,0 +1,98 @@
+//
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+div(class="ui inverted menu gameMenu" )
+    div(class="header item") Yokai Infiltration
+    div(class="header item") 
+        p(id="mainGameName") Loading...
+    a(class="item" href="/") Home
+    div(class="ui inverted right menu")
+        div(class="item")
+            button(id="viewLobby" class="ui inverted button") View lobby
+        div(class="item")
+            button(id="leaveGame" class="ui inverted purple button") Leave Game
+        include loggedInRightMenu.pug
+
+div(id="gameScreen")
+
+    //- Main game area
+    div(id="gameArea")
+
+        div(id="gameHeader")
+            div(id="gamePhase") NIGHT
+            div(id="gameClock") Time: 00:00
+
+        div(id="playerBoard")
+            //- Players will be inserted here by client.tsx
+
+        div(id="gameMessage")
+            //- Space for important temporary game messages
+
+        div(id="guiltyButtons")
+            button(id="innocentButton" class="ui button") Innocent
+            button(id="guiltyButton" class="ui red button") Guilty
+
+
+    //- Chat
+    div(id="gameChat")
+        div(class="sectionTitle") Chat
+
+        div(id="chatContainer")
+            ul(id="chatbox")
+
+        form(id="msgForm" class="messageForm")
+            input(
+                id="msg"
+                autocomplete="off"
+                placeholder="Type a message..."
+                maxlength="150"
+                autofocus
+            )
+            input(
+                id="submit"
+                type="submit"
+                value="Send"
+            )
+
+
+    //- Player/role information
+    div(id="gameSidebar")
+
+        div(class="gameSideSection")
+            div(class="sectionTitle") Players
+            ul(id="playerNames")
+                li(class="gameli") Players:
+
+        div(class="gameSideSection")
+            div(class="sectionTitle") Your Role
+            ul(id="roleNames")
+                li(class="gameli") Role:
+
+    div(
+    id="roleSelection"
+    style="display:none;"
+)
+    div(class="header") You are the host. Role selection:
+
+    br
+
+    div(class="ui form")
+        h4 Default
+        p Pressing the default button will start with the default rolelist:
+        button(class="ui blue button") Default
+
+        br
+
+        h4 Custom
+        p Select as many roles as you have players, then hit submit to start:
+        div(id="allRolesForGameType")
+        br
+        button(class="ui blue button") Submit

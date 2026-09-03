@@ -1,0 +1,95 @@
+//
+    Copyright 2017-2018 James V. Craster
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+//Parameters passed in by express:
+//numberOfGames : number of games ran by the server.
+//players : 2D array of player name / player color pairs.
+//gameNames : array of names of games.
+//gameInPlay : array of booleans, true if nth game in play, false otherwise
+//gameTypes : array of strings, each correspoding to a game title
+//loggedIn : boolean, true if the player is logged in, false otherwise
+//username: the username of the logged in player
+//uids : the unique ids of the games
+//gameCheckboxesArray: all the different kinds of possible games, in order
+
+doctype html
+include includes/lobbyEntry.pug
+//this include causes a flash of unstyled content if placed here - put in html tag instead
+//include includes/offlineWarning.pug
+
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="description" content="The online multiplayer mafia game that's 100% open-source.")
+        link(rel="icon" href="icon.png")
+        link(rel="stylesheet" type="text/css" href="main.css")
+        link(rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css")
+        link(rel="stylesheet" type="text/css" href="simplebar.min.css")
+        link(rel="alternate" media="only screen and (max-width: 640px)" href="http://www.openwerewolf.com/mobile")
+        // IBM Plex Sans google font
+        link(href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans" rel="stylesheet")
+        title Yokai Infiltration 
+    
+    // Move scrollbar to bottom on window resize 
+    body
+        
+        //need to add hidden attr to all of these...
+        include includes/offlineWarning.pug
+        include includes/register.pug
+        include includes/login.pug
+        include includes/leaveGameModal.pug
+        include includes/newGameModal.pug
+        include includes/forgottenPasswordModal.pug
+        div(id="landingPage")
+            div(class="ui inverted menu")
+                div(class="header item") Yokai Infiltration
+                //a(class="item" href="/about" target="_blank") About
+                a(class="item" href="https://www.github.com/JamesCraster/OpenWerewolf" target="_blank") Github
+                a(class="item" href="https://discord.gg/AYmr9vc" target="_blank") Discord
+                a(class="item" href="https://github.com/JamesCraster/OpenWerewolf/wiki/Rules") Rules/Guides
+                div(class="ui inverted right menu")
+                    include includes/loggedInRightMenu.pug
+                    
+            div(id="landingPageCenter")
+                //p(id="registrationPageTitle") Yokai Infiltration
+                img(src="assets/gallowslogo.png" style="margin-left:40px")
+                div(id="errors")
+                form(id="registerForm" action="" class="messageForm")
+                    div(class="ui action input")
+                        input(type="text" id="registerBox" autocomplete="off" maxlength="10"  placeholder="Enter a nickname..." autofocus)
+                        button(id="registerButton" class="ui inverted button") Submit
+            
+            p(id="copyrightNotice")
+                a(href="/imprint") Copyright and attribution
+        
+        include includes/lobby.pug
+        div(id="topLevel")
+            include includes/game.pug
+
+    script
+        | if (screen.width <= 699) {
+        |   document.location = "/mobile";
+        | }
+    //script(src="s.min.js")
+    //script(src="pixi.min.js")
+    //script(src='webfontloader.js')
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+    script(src="semantic/dist/semantic.min.js")
+    script(src="simplebar.min.js")
+    //script(crossorigin src="https://unpkg.com/react@16/umd/react.development.js")
+    //script(crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js")
+    //script(src="components.js")
+    //script(src="client.js")
+    //script(src="pixicanvas.js")
+    script(src="bundle.js")
+
