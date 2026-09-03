@@ -1,0 +1,574 @@
+/*!
+  Copyright 2017-2018 James V. Craster
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+$standard-border: 2px solid #020202;
+$central-flexbox-width: 60%;
+$central-innerbox-width: 90%;
+$central-innerbox-height: 70%;
+$msg-height: 40px;
+$standard-font-size: 18px;
+$small-font-size: 0.9em;
+$inner-div-margin-bottom: 105px;
+
+@mixin standard-flexbox($flex-direction) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  flex-direction: $flex-direction;
+}
+
+@font-face {
+  font-family: Mercutio;
+  src: url('mercutio_basic.ttf') format('truetype');
+}
+
+* {
+  margin: 0;
+  padding: 0px 0px;
+  font-family: "IBM Plex Sans", sans-serif; //IBM Plex Sans from Google Fonts
+  line-height: normal;
+}
+
+html,
+body {
+  height: 100%;
+  background: #212121;
+}
+
+body {
+  overflow-y: hidden;
+}
+
+#header {
+  height: 100%;
+}
+
+#discordLogo {
+  display: inline;
+  padding-left: 5px;
+  padding-top: 5px;
+}
+
+#errors {
+  height: 50px
+}
+
+#landingPageCenter {
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+#registerForm {
+  margin-top: 1%;
+}
+
+#copyrightNotice {
+  min-width: 500px;
+  font-size: 0.9em;
+  color: #a5a5a5;
+  position: fixed;
+  bottom: 8px;
+  left: 10px;
+}
+
+#registrationPageTitle {
+  font-size: 5em;
+  margin-bottom: 20px;
+  color: #cecece;
+}
+
+#gameScreen {
+  height: calc(100% - 48px);
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: 1fr 260px;
+  grid-template-rows: 1fr 280px;
+
+  background: #212121;
+}
+
+#gameArea {
+  grid-column: 1;
+  grid-row: 1;
+
+  position: relative;
+  overflow: hidden;
+
+  border-right: $standard-border;
+}
+
+#gameHeader {
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+
+  border-bottom: $standard-border;
+
+  background: #292929;
+}
+
+#gamePhase {
+  font-size: 1.4em;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+}
+
+#gameClock {
+  font-size: 1.2em;
+  color: #cecece;
+}
+
+#playerBoard {
+  position: absolute;
+
+  top: 70px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(90px, auto);
+
+  align-content: center;
+  justify-items: center;
+
+  gap: 25px;
+
+  padding: 40px;
+}
+
+.gamePlayer {
+  width: 120px;
+  min-height: 75px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background: #303030;
+
+  border: $standard-border;
+  border-radius: 4px;
+
+  color: #cecece;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    transform 0.15s;
+}
+
+.gamePlayer:hover {
+  background: #3a3a3a;
+  border-color: #cecece;
+
+  transform: translateY(-2px);
+}
+
+.gamePlayer.selected {
+  border-color: #c9a227;
+  background: #3a3422;
+}
+
+.gamePlayer.voted {
+  border-color: #c9a227;
+  background: #3a3422;
+}
+
+.gamePlayer.dead {
+  opacity: 0.4;
+  text-decoration: line-through;
+  cursor: default;
+}
+
+.gamePlayerIcon {
+  width: 32px;
+  height: 32px;
+
+  margin-bottom: 7px;
+
+  border: 2px solid #cecece;
+  border-radius: 50%;
+
+  background: #212121;
+}
+
+.gamePlayerName {
+  font-size: 0.95em;
+  text-align: center;
+  word-break: break-word;
+}
+
+.gamePlayer.dead {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.gamePlayer.dead .gamePlayerIcon {
+    border-color: #555;
+    background: #181818;
+}
+
+.gamePlayer.dead .gamePlayerName {
+    color: #777;
+    text-decoration: line-through;
+}
+
+#gameMessage {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  padding: 15px 25px;
+
+  text-align: center;
+
+  color: #cecece;
+
+  pointer-events: none;
+}
+
+#gameChat {
+  grid-column: 1;
+  grid-row: 2;
+
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  border-top: $standard-border;
+  border-right: $standard-border;
+
+  background: #242424;
+}
+
+#gameChat .sectionTitle,
+.gameSideSection .sectionTitle {
+  padding: 8px 12px;
+
+  background: #303030;
+
+  border-bottom: $standard-border;
+
+  color: #cecece;
+
+  font-size: 0.95em;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+#chatContainer {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+}
+
+#chatbox {
+  list-style: none;
+}
+
+#msgForm {
+  display: flex;
+
+  height: 42px;
+
+  border-top: $standard-border;
+}
+
+#msg {
+  flex: 1;
+
+  width: auto;
+  height: 42px;
+
+  float: none;
+
+  box-sizing: border-box;
+
+  border: none;
+  border-right: $standard-border;
+
+  background: #1b1b1b;
+  color: #cecece;
+
+  padding: 0 10px;
+}
+
+#submit {
+  width: 75px;
+  height: 42px;
+
+  margin: 0;
+
+  border: none;
+
+  background: #303030;
+  color: #cecece;
+}
+
+#submit:hover {
+  background: #3a3a3a;
+}
+
+#gameSidebar {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+
+  overflow-y: auto;
+
+  background: #1b1b1b;
+}
+
+.gameSideSection {
+  border-bottom: $standard-border;
+}
+
+.gameSideSection ul {
+  list-style: none;
+}
+
+.gameSideSection .gameli {
+  border-bottom: 1px solid #111;
+}
+
+a {
+  white-space: nowrap;
+  color: #268ef5;
+}
+
+#lobby {
+    display: flex;
+    flex-direction: row;
+
+    height: calc(100% - 48px);
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.loading {
+  font-style: italic;
+}
+
+#container {
+    box-sizing: border-box;
+
+    width: 35%;
+    height: 100%;
+
+    margin: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    color: #cecece;
+
+    border-right: $standard-border;
+}
+
+#lobbyRightBar {
+    box-sizing: border-box;
+
+    width: 65%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    border: none;
+}
+
+.lobbyItemHeader {
+    height: 35px;
+
+    box-sizing: border-box;
+
+    padding: 8px 10px;
+
+    background-color: #252525;
+
+    border-bottom: $standard-border;
+}
+
+.lobbyItemBody {
+    position: static;
+
+    width: auto;
+
+    padding: 8px 10px;
+
+    margin: 0;
+
+    color: #aaa;
+}
+
+.lobbyItem {
+    position: relative;
+
+    width: calc(100% - 20px);
+    min-width: 0;
+    height: 90px;
+
+    margin: 10px;
+
+    box-sizing: border-box;
+
+    border: $standard-border;
+    border-radius: 3px;
+
+    background-color: #303030;
+
+    font-size: 1em;
+}
+
+#menubar {
+  flex-direction: column;
+  background-color: #1c4b6d;
+  border: 2px solid black;
+  display: block;
+  width: 25%;
+  height: 25px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.menuitem {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  min-width: 50px;
+}
+
+#mainTitle {
+  font-size: 2.24em;
+  margin-bottom: 2%
+}
+
+#gameStatus {
+  float: right;
+  padding-right: 5px
+}
+
+#gameType {
+  float: right;
+  padding-right: 5px;
+}
+
+.gameName {
+  float: left;
+  padding-right: 5px
+}
+
+.inPlay {
+  float: right;
+  padding-right: 5px;
+}
+
+#mainGameName {
+  margin-top: 0;
+  margin-left: 0;
+  font-size: 1rem;
+}
+
+.menulink {
+  padding-left: 15px;
+}
+
+//Remove simplebar track vertical due to bug that causes it to appear
+//even when not asked for
+.simplebar-track.vertical {
+  display: none;
+}
+
+@media only screen and (max-device-width: 430px) {
+
+  * {
+    font-size: 18px;
+  }
+
+  #inner {
+    height: 100%;
+    width: 100%;
+  }
+
+  #msg {
+    height: 60px;
+  }
+
+  .input {
+    font-size: 20px;
+  }
+
+  .sideBox {
+    display: none;
+  }
+
+  #name {
+    display: none;
+  }
+
+  #outer {
+    @include standard-flexbox(column);
+  }
+
+  #lobby {
+    @include standard-flexbox(row);
+  }
+
+  #topLevel {
+    display: none;
+  }
+}
+
+@media only screen and (min-device-width:430px) {
+  #outer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    align-content: stretch;
+    flex-direction: column;
+  }
+
+  #lobby {
+    @include standard-flexbox(row);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #lobbyRightBar {
+    display: none;
+  }
+
+  #container {
+    width: 100%;
+  }
+}
